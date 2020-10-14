@@ -8,13 +8,30 @@
 </head>
 <body>
     <h1>Food</h1>
-    <form id="movie-form">
+    <form id="food-form">
         <label for="food-input">Enter a food</label>
         <input type="text" id="food-input"><br>
   
         <!-- This button will trigger our AJAX call -->
         <input id="find-food" type="submit" value="Search">
-        <div id="food-view"></div>
+        <div >
+            <table style="width:100%" id="food-view">
+                <tr>
+                  <th>Food</th>
+                  <th>Calories </th>
+                  <th>Proteins</th>
+                </tr>
+
+            </table>
+            <table style="width:100%" id="food-total">
+              <tr>
+                <td> Total </td>
+                <td id="total-cal"> </td>
+                <td id="total-pr"> </td>
+              </tr>
+
+          </table>
+        </div>
       </form>
 
     <div id="edamam-badge" data-color="white"></div>

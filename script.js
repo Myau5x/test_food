@@ -2,7 +2,7 @@ let app_id = '40d3953c';
 let APIKey = '3b1a7af407f95e939b45bbf3554de014';
 
 let query = "https://api.edamam.com/api/food-database/v2/parser?ingr=pepperoni%20pizza&app_id="+app_id+"&app_key="+APIKey;
-/*
+/* example of parser query
 $.ajax({
     url: query,
     method: "GET"
@@ -22,7 +22,7 @@ let data_ex = {
 };
 
 AJAX_POST_URL = "https://api.edamam.com/api/food-database/v2/nutrients?app_id="+app_id+"&app_key="+APIKey;
-/*
+/* example of nutrion query
 $.ajax({
   beforeSend: function(xhrObj){
     xhrObj.setRequestHeader("Content-Type","application/json");
@@ -38,23 +38,16 @@ $.ajax({
   console.log(response);
 })
 */
+let totalCal = 0;
+let totalPr = 0;
 
-//// food id and measure, if not measure use 
-    
-    /// create querry for post request
-    //// create post request
-
-/*
-up to 10 foods?
-search --- calories
-another search ---- more calories + total sum
-up to 10 searches 
- */
+function renderTotal(){
+  
+}
+renderTotal()
 
 $("#find-food").on("click", function(event) {
 
-  // Preventing the submit button from trying to submit the form
-  // We're optionally using a form so the user may hit Enter to search instead of clicking the button
   event.preventDefault();
   let food = $("#food-input").val();
   console.log(food);
@@ -71,8 +64,8 @@ $("#find-food").on("click", function(event) {
     parsed.forEach(function(el) {
       console.log(el.food.foodId);
       console.log(el.food.nutrients.ENERC_KCAL);
-      console.log(el.measure.uri); 
-      console.log(el.quantity);
+      //console.log(el.measure.uri); 
+      //console.log(el.quantity);
       /**
        * {
       "quantity": 1,
@@ -81,43 +74,70 @@ $("#find-food").on("click", function(event) {
        }
        */
       ///add default values for quantity and m.uri
-      let new_ing = {'quantity':el.quantity,'measureURI':el.measure.uri,'foodId':el.food.foodId};
+      let qu = el.quantity;
+      if (!qu){
+        qu = 1;
+      }
+      let me = "";
+      if (!el.measure){
+        me = "http://www.edamam.com/ontologies/edamam.owl#Measure_serving";
+      }
+      else{
+        me = el.measure.uri;
+      }
+      
+      let foodID = el.food.foodId;
+      let new_ing = {'quantity':qu,'measureURI':me,'foodId': foodID};
       ingr.push(new_ing);
     });
-    data_post = {'ingredients':ingr}
+    
+    ingr.forEach(function(el){
+    data_post = {'ingredients':[el]};
     console.log("======data-post====");
     console.log(data_post);
-
+/// work with just one ingridient , have to have loop
     $.ajax({
       beforeSend: function(xhrObj){
         xhrObj.setRequestHeader("Content-Type","application/json");
     },
       url : AJAX_POST_URL,
       type: "POST",
-      //headers: {"Content-Type": "application/json"},
       data : JSON.stringify(data_post),
       dataType: "json"
     }).done(function(response){
-
+      
       console.log(response);
       let cal = response.totalNutrients.ENERC_KCAL;
       console.log(cal);
-
-
+      let calorie =cal.quantity;
+      let proteins = response.totalNutrients.PROCNT.quantity;
+      totalCal+=calorie;
+      totalPr+=proteins;
+      /// add table row
+      /**
+       *   <tr>
+          <td>Jill</td>
+          <td>Smith</td>
+          <td>50</td>
+        </tr
+       */
+      let new_row = $("<tr>");
+      let foodCol = $("<td>");
+      foodCol.text(food);
+      let calCol = $("<td>");
+      calCol.text(calorie);
+      let PrCol = $("<td>");
+      PrCol.text(proteins);
+      new_row.append(foodCol,calCol,PrCol);
+      $("#food-view").append(new_row);
+      renderTotal)();
     }).fail(function(response){
       console.log(response);
-    })
+    });
+    });
 
-
-
-
-
-    let old_text = $("#food-view").text();
-    $("#food-view").text(JSON.stringify(nutr)+old_text);
-
+  ////add row to table
     
-    
-
-  })
+  }).fail(function(error){console.log(error)});
 
 })
