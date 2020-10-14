@@ -42,7 +42,8 @@ let totalCal = 0;
 let totalPr = 0;
 
 function renderTotal(){
-  
+  $("#total-cal").text(totalCal);
+  $("#total-pr").text(totalPr);
 }
 renderTotal()
 
@@ -129,8 +130,8 @@ $("#find-food").on("click", function(event) {
       let PrCol = $("<td>");
       PrCol.text(proteins);
       new_row.append(foodCol,calCol,PrCol);
-      $("#food-view").append(new_row);
-      renderTotal)();
+      $("#food-view").prepend(new_row);
+      renderTotal();
     }).fail(function(response){
       console.log(response);
     });

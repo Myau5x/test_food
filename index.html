@@ -15,22 +15,26 @@
         <!-- This button will trigger our AJAX call -->
         <input id="find-food" type="submit" value="Search">
         <div >
-            <table style="width:100%" id="food-view">
+            <table style="width:100%" id="captions">
                 <tr>
                   <th>Food</th>
                   <th>Calories </th>
                   <th>Proteins</th>
                 </tr>
+            </table>
+            <table style="width:100%" id="food-view">
+
+                <tr>
+                  <td> Total </td>
+                  <td id="total-cal"> </td>
+                  <td id="total-pr"> </td>
+                </tr>
 
             </table>
-            <table style="width:100%" id="food-total">
-              <tr>
-                <td> Total </td>
-                <td id="total-cal"> </td>
-                <td id="total-pr"> </td>
-              </tr>
+            
 
-          </table>
+
+          
         </div>
       </form>
 
